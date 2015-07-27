@@ -26,7 +26,11 @@ SOURCES += main.cpp\
     ../EM_Scheduler/xlsoutput.cpp \
     newrotators.cpp \
     newschedule.cpp \
-    setdate.cpp
+    setdate.cpp \
+    editpreferences.cpp \
+    displayschedule.cpp \
+    displaydateshifts.cpp \
+    displayshift.cpp
 
 HEADERS  += mainwindow.h \
     ../EM_Scheduler/Date.h \
@@ -38,12 +42,20 @@ HEADERS  += mainwindow.h \
     ../EM_Scheduler/Parser.h \
     newrotators.h \
     newschedule.h \
-    setdate.h
+    setdate.h \
+    editpreferences.h \
+    displayschedule.h \
+    displaydateshifts.h \
+    displayshift.h
 
 FORMS    += mainwindow.ui \
     newrotators.ui \
     newschedule.ui \
-    setdate.ui
+    setdate.ui \
+    editpreferences.ui \
+    displayschedule.ui \
+    displaydateshifts.ui \
+    displayshift.ui
 
 LIBS  += "C:/lib/xlslib-qt/lib/libxls.a"
 INCLUDEPATH += "C:/lib/xlslib-qt/include"

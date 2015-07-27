@@ -84,6 +84,6 @@ void NewRotators::on_buttonBox_accepted()
     for(int i = 0; i < studentNames->size(); i++)
     {
         //Enter names into the vector
-        (*studentNames)[i] = nameEdits[i]->text().toStdString();
+        (*studentNames)[i] = nameEdits[i]->text().toStdString();    //Not working apparently?
     }
 }

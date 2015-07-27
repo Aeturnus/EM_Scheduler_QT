@@ -40,8 +40,10 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
     ui->spinBox_NumStudents->setValue(6);
     ui->spinBox_NumMaxShifts->setMinimum(14);
     ui->spinBox_NumMaxShifts->setValue(14);
+    //ui->spinBox_NumMaxShifts->setValue(Student::MAX_SHIFTS);
     ui->spinBox_NumMinShifts->setMinimum(12);
     ui->spinBox_NumMinShifts->setValue(12);
+    //ui->spinBox_NumMinShifts->setValue(Student::MIN_SHIFTS);
     ui->spinBox_NumShifts->setMinimum(1);
     ui->spinBox_NumShifts->setValue(5);
 

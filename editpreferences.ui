@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditPreferences</class>
+ <widget class="QDialog" name="EditPreferences">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>260</y>
+     <width>160</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Default save directory:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_SaveDir">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>10</y>
+     <width>250</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Default export directory:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_ExportDir">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>40</y>
+     <width>250</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Maximum shifts:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>160</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Minimum shifts:</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinBox_NumMaxShifts">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>130</y>
+     <width>43</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Maximum number of shifts a student can have</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinBox_NumMinShifts">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>160</y>
+     <width>43</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The minimum number of shifts a student can have</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_SavePath">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>70</y>
+     <width>250</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The file which &quot;Save CTRL+S&quot; will save to</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Export path:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save path:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_ExportPath">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>100</y>
+     <width>250</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>The file &quot;Export CTRL+X&quot; will export to</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EditPreferences</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EditPreferences</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

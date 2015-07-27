@@ -31,9 +31,27 @@
     <addaction name="actionOpen_Schedule"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Schedule"/>
+    <addaction name="actionSave_As"/>
     <addaction name="actionExport_xls"/>
+    <addaction name="actionExport_as"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuSchedule">
+    <property name="title">
+     <string>Schedule</string>
+    </property>
+    <addaction name="actionAuto_Assign"/>
+    <addaction name="actionManual_Assign"/>
+    <addaction name="actionManual_Block"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuSchedule"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -48,20 +66,71 @@
    <property name="text">
     <string>New Schedule</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen_Schedule">
    <property name="text">
     <string>Open Schedule</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionExport_xls">
    <property name="text">
-    <string>Export .xls</string>
+    <string>Export..</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
   <action name="actionSave_Schedule">
    <property name="text">
-    <string>Save Schedule</string>
+    <string>Save..</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="text">
+    <string>Save As..</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionExport_as">
+   <property name="text">
+    <string>Export as..</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+X</string>
+   </property>
+  </action>
+  <action name="actionAuto_Assign">
+   <property name="text">
+    <string>Auto Assign</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionManual_Assign">
+   <property name="text">
+    <string>Manual Assign</string>
+   </property>
+  </action>
+  <action name="actionManual_Block">
+   <property name="text">
+    <string>Manual Block</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

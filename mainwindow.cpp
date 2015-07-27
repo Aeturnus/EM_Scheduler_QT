@@ -9,8 +9,21 @@
 #include "../EM_Scheduler/xlsoutput.h"
 
 #include "newschedule.h"
+#include "editpreferences.h"
+
 #include <xlslib.h>
 #include <xlslib/common.h>
+
+#include <QDir>
+#include <QFile>
+#include <QDataStream>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QFileInfo>
+
+#include <string>
+#include <ostream>
+#include <istream>
 
 using namespace xlslib_core;
 
@@ -24,25 +37,138 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete display;
 }
 
 void MainWindow::init(Scheduler *attachSchedule, string *attachSaveDir, string *attachExportDir)
 {
     scheduleLoaded = false;
+    display = new DisplaySchedule(this);
+    display->move(0,ui->menuBar->height()+ui->mainToolBar->height());
+
     schedule = attachSchedule;
     savedir = attachSaveDir;
     exportdir = attachExportDir;
+    *savedir = "C:/EM_Scheduler/schedules";
+    *exportdir = "C:/EM_Scheduler/spreadsheets";
+    //Create paths
+    QString dirpath = QString::fromStdString(*savedir);
+    QDir dir(dirpath);
+    if(!dir.exists())
+    {
+        dir.mkpath(".");
+    }
+    dirpath = QString::fromStdString(*exportdir);
+    dir.setPath(dirpath);
+    if(!dir.exists())
+    {
+        dir.mkpath(".");
+    }
 
+    updateMenu();
 }
 
 void MainWindow::on_actionNew_Schedule_triggered()
 {
-    NewSchedule n;
-    n.init(schedule,savedir,exportdir,&scheduleLoaded);
-    n.exec();//Force user to accept something
+    newSchedule();
 }
 
 void MainWindow::on_actionExport_xls_triggered()
+{
+    exportNormal();
+}
+
+void MainWindow::updateMenu()
+{
+    //Grey out schedule related options if not loaded
+    ui->actionExport_as->setEnabled(scheduleLoaded);
+    ui->actionExport_xls->setEnabled(scheduleLoaded);
+    ui->actionSave_Schedule->setEnabled(scheduleLoaded);
+    ui->actionSave_As->setEnabled(scheduleLoaded);
+    ui->menuSchedule->setEnabled(scheduleLoaded);
+
+}
+
+void MainWindow::on_actionOpen_Schedule_triggered()
+{
+    open();
+}
+
+void MainWindow::on_actionSave_Schedule_triggered()
+{
+    save();
+}
+
+void MainWindow::open(void)
+{
+    QString dirPath = QString::fromStdString((*savedir));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open Schedule"),dirPath,tr("Schedule files (*.schd);;All files (*.*)"));
+    if(!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if(!file.open(QIODevice::ReadOnly))
+        {
+            QMessageBox::critical(this,tr("Error"),tr("Could not open file"));
+            return;
+        }
+        ui->statusBar->showMessage("Schedule loaded from " + fileName);
+
+        ifstream filei;
+        filei.open(fileName.toStdString(), ios_base::in | ios_base::binary);//Binary mode so it doesn't reach premature EOF
+        schedule->streamInBinary(filei);
+        filei.close();
+        scheduleLoaded = true;
+        updateMenu();
+        savepath = fileName.toStdString();
+
+        display->init(schedule);
+    }
+}
+
+void MainWindow::save(void)
+{
+    if(scheduleLoaded)
+    {
+        //std::string savepath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*savedir) + "/" + schedule->getName() + ".schd" );
+        ofstream fileo;
+        fileo.open(savepath);
+        if(fileo.is_open())
+        {
+            schedule->streamOutBinary(fileo);
+            ui->statusBar->showMessage("Schedule saved to " + QString::fromStdString(savepath),0);
+        }
+        else
+        {
+            ui->statusBar->showMessage("ERROR saving schedule to" + QString::fromStdString(savepath),0);
+        }
+        fileo.close();
+    }
+}
+
+void MainWindow::saveAs(void)
+{
+    if(!scheduleLoaded)
+        return;
+    QString dirPath = QString::fromStdString((*savedir)) +"/"+ QString::fromStdString(schedule->getName());
+    QString fileName = QFileDialog::getSaveFileName(this,tr("Save Schedule"),dirPath,tr("Schedule files (*.schd);;All files (*.*)"));
+    if(!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::critical(this,tr("Error"),tr("Could not write to file"));
+            return;
+        }
+        ui->statusBar->showMessage("Schedule saved to" + fileName);
+
+        ofstream fileo;
+        fileo.open(fileName.toStdString());
+        schedule->streamOutBinary(fileo);
+        fileo.close();
+    }
+    savepath = fileName.toStdString();
+}
+void MainWindow::exportNormal(void)
 {
     //Make sure a schedule is loaded
     if(scheduleLoaded)
@@ -54,10 +180,67 @@ void MainWindow::on_actionExport_xls_triggered()
         ui->statusBar->showMessage("Schedule exported to " + QString::fromStdString(exportpath),0);
     }
 }
-
-void MainWindow::updateMenu()
+void MainWindow::exportAs(void)
 {
-    //Grey out "Export .xls" if schedule not loaded
-    ui->actionExport_xls->setEnabled(scheduleLoaded);
-    ui->actionSave_Schedule->setEnabled(scheduleLoaded);
+    //Make sure a schedule is loaded
+    if(scheduleLoaded)
+    {
+        workbook wb;
+        scheduleToXLS(*schedule,wb);
+
+        QString dirPath = QString::fromStdString((*exportdir)) +"/"+ QString::fromStdString(schedule->getName());
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Export .xls"),dirPath,tr("Excel 97-2003 (*.xls);;All files (*.*)"));
+        if(!fileName.isEmpty())
+        {
+            QFile file(fileName);
+            if(!file.open(QIODevice::WriteOnly))
+            {
+                QMessageBox::critical(this,tr("Error"),tr("Could not write to file"));
+                return;
+            }
+            wb.Dump(fileName.toStdString());
+            ui->statusBar->showMessage("Schedule exported to " + fileName,0);
+            exportpath = fileName.toStdString();
+        }
+    }
+}
+
+void MainWindow::newSchedule(void)
+{
+    NewSchedule n;
+    n.init(schedule,savedir,exportdir,&scheduleLoaded);
+    n.exec();//Force user to accept something
+    if(scheduleLoaded)
+    {
+        savepath = *savedir + "/" + schedule->getName() + ".schd";
+        exportpath = *exportdir + "/" + schedule->getName() + ".xls";
+        updateMenu();
+
+        display->init(schedule);
+
+    }
+
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    saveAs();
+}
+
+void MainWindow::on_actionExport_as_triggered()
+{
+   exportAs();
+}
+
+void MainWindow::on_actionAuto_Assign_triggered()
+{
+    schedule->autoblock();
+    schedule->autoassign();
+}
+
+void MainWindow::on_actionPreferences_triggered()
+{
+    EditPreferences e;
+    e.init(savedir,&savepath,exportdir,&exportpath);
+    e.exec();
 }
