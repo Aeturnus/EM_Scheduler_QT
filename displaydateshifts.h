@@ -6,6 +6,7 @@
  */
 
 #include <QWidget>
+#include <QFrame>
 #include <QLabel>
 
 #include <vector>
@@ -20,7 +21,7 @@ namespace Ui {
 class DisplayDateShifts;
 }
 
-class DisplayDateShifts : public QWidget
+class DisplayDateShifts : public QFrame
 {
     Q_OBJECT
 
@@ -31,8 +32,9 @@ public:
 
     unsigned int getShiftNum(void);
 
+    void update(void);  //Update appearances
     int WIDTH = 100;
-    int HEIGHT = 100;
+    int HEIGHT = 800;
 private:
     Ui::DisplayDateShifts *ui;
     Date* date;                     //Pass pointer of the selected date to it

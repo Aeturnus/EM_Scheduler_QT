@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QScrollArea>
+
 #include <string>
 
 #include "../EM_Scheduler/Scheduler.h"
@@ -42,6 +44,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    void resizeEvent(QResizeEvent *event);
+
+    void resizeScrollArea(void);
+
+    QScrollArea* scrollArea;
+
     Scheduler* schedule;
     std::string* savedir;
     std::string* exportdir;
@@ -51,6 +59,7 @@ private:
 
     DisplaySchedule* display;
     bool scheduleLoaded;
+    bool displayAllocated;
 
     void newSchedule(void);
     void open(void);

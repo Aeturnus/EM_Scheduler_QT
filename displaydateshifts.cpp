@@ -12,7 +12,7 @@
 #include "../EM_Scheduler/Date.h"
 
 DisplayDateShifts::DisplayDateShifts(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     ui(new Ui::DisplayDateShifts)
 {
     ui->setupUi(this);
@@ -51,28 +51,35 @@ void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
     }
 
     //Size and placement of shifts
-    resize(WIDTH,HEIGHT);
+    update();
+
+}
+
+void DisplayDateShifts::update(void)
+{
     labelDate->move(0,0);
     //Place shifts
+    int height = labelDate->height();
     for(int i = 0; i < shiftNum; i++)
     {
         if(i == 0)
         {
             //If it's the first one, move relative to labelDate
-            shiftWidgets[i]->move(0,labelDate->height() + labelDate->y());
+            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,labelDate->height() + labelDate->y());
         }
         else
         {
             //If it's not the first one, move it relative to the last shift widget
-            shiftWidgets[i]->move(0,shiftWidgets[i]->height() + shiftWidgets[i]->y());
+            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,shiftWidgets[i-1]->height() + shiftWidgets[i-1]->y());
         }
+        height += shiftWidgets[i]->height();
+        shiftWidgets[i]->update();
     }
+
+    resize(shiftWidgets[0]->width()+shiftWidgets[0]->width()/4,height);
 }
-
-
 
 unsigned int DisplayDateShifts::getShiftNum(void)
 {
     return shiftNum;
 }
-

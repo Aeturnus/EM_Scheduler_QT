@@ -30,7 +30,10 @@ SOURCES += main.cpp\
     editpreferences.cpp \
     displayschedule.cpp \
     displaydateshifts.cpp \
-    displayshift.cpp
+    displayshift.cpp \
+    testframe.cpp \
+    shiftselect.cpp \
+    displaystudent.cpp
 
 HEADERS  += mainwindow.h \
     ../EM_Scheduler/Date.h \
@@ -46,7 +49,10 @@ HEADERS  += mainwindow.h \
     editpreferences.h \
     displayschedule.h \
     displaydateshifts.h \
-    displayshift.h
+    displayshift.h \
+    testframe.h \
+    shiftselect.h \
+    displaystudent.h
 
 FORMS    += mainwindow.ui \
     newrotators.ui \
@@ -55,7 +61,10 @@ FORMS    += mainwindow.ui \
     editpreferences.ui \
     displayschedule.ui \
     displaydateshifts.ui \
-    displayshift.ui
+    displayshift.ui \
+    testframe.ui \
+    shiftselect.ui \
+    displaystudent.ui
 
 LIBS  += "C:/lib/xlslib-qt/lib/libxls.a"
 INCLUDEPATH += "C:/lib/xlslib-qt/include"

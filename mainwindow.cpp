@@ -20,6 +20,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QScrollArea>
+#include <QScrollBar>
 
 #include <string>
 #include <ostream>
@@ -44,7 +46,13 @@ void MainWindow::init(Scheduler *attachSchedule, string *attachSaveDir, string *
 {
     scheduleLoaded = false;
     display = new DisplaySchedule(this);
-    display->move(0,ui->menuBar->height()+ui->mainToolBar->height());
+    //display->setBackgroundRole(QPalette::Dark);
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidget(display);
+    display->show();
+
+    resizeScrollArea();
+    scrollArea->show();
 
     schedule = attachSchedule;
     savedir = attachSaveDir;
@@ -112,16 +120,21 @@ void MainWindow::open(void)
             return;
         }
         ui->statusBar->showMessage("Schedule loaded from " + fileName);
-
+        scheduleLoaded = true;
         ifstream filei;
         filei.open(fileName.toStdString(), ios_base::in | ios_base::binary);//Binary mode so it doesn't reach premature EOF
         schedule->streamInBinary(filei);
         filei.close();
-        scheduleLoaded = true;
         updateMenu();
         savepath = fileName.toStdString();
 
+        if(scheduleLoaded)
+        {
+            display->deleteMem();
+        }
         display->init(schedule);
+
+
     }
 }
 
@@ -131,7 +144,7 @@ void MainWindow::save(void)
     {
         //std::string savepath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*savedir) + "/" + schedule->getName() + ".schd" );
         ofstream fileo;
-        fileo.open(savepath);
+        fileo.open(savepath, ios_base::out | ios_base::binary);
         if(fileo.is_open())
         {
             schedule->streamOutBinary(fileo);
@@ -162,7 +175,7 @@ void MainWindow::saveAs(void)
         ui->statusBar->showMessage("Schedule saved to" + fileName);
 
         ofstream fileo;
-        fileo.open(fileName.toStdString());
+        fileo.open(fileName.toStdString(), ios_base::out | ios_base::binary);
         schedule->streamOutBinary(fileo);
         fileo.close();
     }
@@ -180,6 +193,7 @@ void MainWindow::exportNormal(void)
         ui->statusBar->showMessage("Schedule exported to " + QString::fromStdString(exportpath),0);
     }
 }
+
 void MainWindow::exportAs(void)
 {
     //Make sure a schedule is loaded
@@ -207,6 +221,8 @@ void MainWindow::exportAs(void)
 
 void MainWindow::newSchedule(void)
 {
+
+
     NewSchedule n;
     n.init(schedule,savedir,exportdir,&scheduleLoaded);
     n.exec();//Force user to accept something
@@ -216,8 +232,9 @@ void MainWindow::newSchedule(void)
         exportpath = *exportdir + "/" + schedule->getName() + ".xls";
         updateMenu();
 
-        display->init(schedule);
 
+        display->deleteMem();
+        display->init(schedule);
     }
 
 }
@@ -229,13 +246,14 @@ void MainWindow::on_actionSave_As_triggered()
 
 void MainWindow::on_actionExport_as_triggered()
 {
-   exportAs();
+    exportAs();
 }
 
 void MainWindow::on_actionAuto_Assign_triggered()
 {
     schedule->autoblock();
     schedule->autoassign();
+    display->update();
 }
 
 void MainWindow::on_actionPreferences_triggered()
@@ -243,4 +261,16 @@ void MainWindow::on_actionPreferences_triggered()
     EditPreferences e;
     e.init(savedir,&savepath,exportdir,&exportpath);
     e.exec();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    resizeScrollArea();
+}
+
+void MainWindow::resizeScrollArea(void)
+{
+    scrollArea->move(0,ui->menuBar->height()+ui->mainToolBar->height());
+    scrollArea->resize(width(),height() - ui->mainToolBar->height() - scrollArea->horizontalScrollBar()->height() - ui->statusBar->height());
 }

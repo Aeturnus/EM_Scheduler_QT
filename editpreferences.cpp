@@ -28,11 +28,6 @@ EditPreferences::init(std::string *saved, std::string *savep, std::string *expor
     ui->lineEdit_SavePath->setText(QString::fromStdString(*savepath));
     ui->lineEdit_ExportDir->setText(QString::fromStdString(*exportdir));
     ui->lineEdit_ExportPath->setText(QString::fromStdString(*exportpath));
-
-    ui->spinBox_NumMaxShifts->setValue(Student::MAX_SHIFTS);
-    ui->spinBox_NumMinShifts->setValue(Student::MIN_SHIFTS);
-
-
 }
 
 void EditPreferences::on_buttonBox_accepted()
@@ -41,7 +36,4 @@ void EditPreferences::on_buttonBox_accepted()
     *savepath = ui->lineEdit_SavePath->text().toStdString();
     *exportdir = ui->lineEdit_ExportDir->text().toStdString();
     *exportpath= ui->lineEdit_ExportPath->text().toStdString();
-
-    Student::setMaxShift(ui->spinBox_NumMaxShifts->value());
-    Student::setMinShift(ui->spinBox_NumMinShifts->value());
 }

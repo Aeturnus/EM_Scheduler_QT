@@ -9,28 +9,63 @@ DisplaySchedule::DisplaySchedule(QWidget *parent) :
     ui(new Ui::DisplaySchedule)
 {
     ui->setupUi(this);
+
+    schedule = nullptr;
+
+    resize(10000,10000);
 }
 
 DisplaySchedule::~DisplaySchedule()
 {
     delete ui;
-    for(int i = 0; i < 1; i++)
+    deleteMem();
+}
+
+void DisplaySchedule::deleteMem(void)
+{
+    if(schedule != nullptr)
     {
-        delete dateShiftWidgets[i];
+        unsigned int dateNum = schedule->getDateNum();
+        for(int i = 0; i < dateNum; i++)
+        {
+            delete dateShiftWidgets[i];
+        }
+        delete[] dateShiftWidgets;
     }
-    delete[] dateShiftWidgets;
+    schedule = nullptr;
 }
 
 void DisplaySchedule::init(Scheduler *attachSchedule)
 {
     schedule = attachSchedule;
+    dateShiftWidgets = new DisplayDateShifts*[schedule->getDateNum()];
 
-    dateShiftWidgets = new DisplayDateShifts*[1];
-
-    for(int i = 0; i < 1; i++)
+    unsigned int dateNum = schedule->getDateNum();
+    for(int i = 0; i < dateNum; i++)
     {
+        dateShiftWidgets[i] = new DisplayDateShifts(this);
         dateShiftWidgets[i]->init(&(schedule->dates()[i]),schedule);
-        dateShiftWidgets[i]->move(0,0);
+        if(i == 0)
+        {
+            dateShiftWidgets[i]->move(0,0);
+        }
+        else
+        {
+            dateShiftWidgets[i]->move(dateShiftWidgets[i-1]->x() + dateShiftWidgets[i-1]->width() ,0);
+        }
         dateShiftWidgets[i]->show();
+    }
+}
+
+void DisplaySchedule::update(void)
+{
+    if(schedule==nullptr)
+    {
+        return;
+    }
+    unsigned int dateNum = schedule->getDateNum();
+    for(int i = 0; i < dateNum; i++)
+    {
+        dateShiftWidgets[i]->update();
     }
 }

@@ -40,12 +40,11 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
     ui->spinBox_NumStudents->setValue(6);
     ui->spinBox_NumMaxShifts->setMinimum(14);
     ui->spinBox_NumMaxShifts->setValue(14);
-    //ui->spinBox_NumMaxShifts->setValue(Student::MAX_SHIFTS);
     ui->spinBox_NumMinShifts->setMinimum(12);
     ui->spinBox_NumMinShifts->setValue(12);
-    //ui->spinBox_NumMinShifts->setValue(Student::MIN_SHIFTS);
     ui->spinBox_NumShifts->setMinimum(1);
     ui->spinBox_NumShifts->setValue(5);
+    ui->spinBox_NumMaxCon->setValue(4);
 
     //Set up the student name vector
     studentNameVector.clear();
@@ -93,8 +92,9 @@ void NewSchedule::on_buttonBox_accepted()
         shifttimes[i][1] = shiftTimeVector[i][1];
     }
 
-    Student::setMaxShift(ui->spinBox_NumMaxShifts->value());
-    Student::setMinShift(ui->spinBox_NumMinShifts->value());
+    schedule->setMaxShifts(ui->spinBox_NumMaxShifts->value());
+    schedule->setMinShifts(ui->spinBox_NumMinShifts->value());
+    schedule->setMaxConsecutive(ui->spinBox_NumMaxCon->value());
 
     schedule->init(name,start,end,numshift,&shiftNameVector[0],shifttimes,numstudents,&studentNameVector[0]);
 

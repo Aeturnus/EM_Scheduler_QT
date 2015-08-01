@@ -20,12 +20,20 @@ public:
 
     void init(Scheduler* attachSchedule);
 
+    void deleteMem(void);
+
+    int PAD = 50;
+
+    void update(void);
+
 private:
     Ui::DisplaySchedule *ui;
 
     Scheduler* schedule;
 
     DisplayDateShifts** dateShiftWidgets;
+
+
 };
 
 #endif // DISPLAYSCHEDULE_H
