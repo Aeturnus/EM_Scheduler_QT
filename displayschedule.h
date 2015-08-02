@@ -2,6 +2,7 @@
 #define DISPLAYSCHEDULE_H
 
 #include <QWidget>
+#include <QLabel>
 
 #include "../EM_Scheduler/Scheduler.h"
 
@@ -32,6 +33,8 @@ private:
     Scheduler* schedule;
 
     DisplayDateShifts** dateShiftWidgets;
+
+    QLabel* weekdayLabel[7];
 
 
 };

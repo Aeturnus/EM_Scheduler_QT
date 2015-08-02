@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QString>
+#include <QFont>
 
 #include <string>
 #include <sstream>
@@ -40,6 +41,13 @@ void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
     std::stringstream sstream;
     sstream<<std::dec<<date->getMonth()<< " "<<date->getNumDay();
     labelDate->setText(QString::fromStdString(sstream.str()));          //Set the date
+    //(QFont)(labelDate->font()).setBold(true);
+    QFont tempfont;
+    tempfont.setBold(true);
+    tempfont.setPointSize(12);
+    labelDate->setFont(tempfont);
+    labelDate->setAlignment(Qt::AlignHCenter);
+
 
     shiftWidgets = new DisplayShift*[shiftNum];
     for(int i = 0; i <shiftNum; i++)
@@ -49,7 +57,6 @@ void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
         shiftWidgets[i]->init(shiftPtrVector[i],schedule);
         shiftWidgets[i]->show();
     }
-
     //Size and placement of shifts
     update();
 
@@ -57,29 +64,39 @@ void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
 
 void DisplayDateShifts::update(void)
 {
-    labelDate->move(0,0);
     //Place shifts
-    int height = labelDate->height();
+    int prevH = labelDate->height();  //Height of previous element
+    int prevY = labelDate->y();  //Y of previous element
+
+    labelDate->move(0,prevH/4);
     for(int i = 0; i < shiftNum; i++)
     {
         if(i == 0)
         {
             //If it's the first one, move relative to labelDate
-            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,labelDate->height() + labelDate->y());
+            prevH = labelDate->height();
+            prevY = labelDate->y();
+            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,prevH + prevY + prevH/4);
         }
         else
         {
             //If it's not the first one, move it relative to the last shift widget
-            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,shiftWidgets[i-1]->height() + shiftWidgets[i-1]->y());
+            prevH = shiftWidgets[i-1]->height();
+            prevY = shiftWidgets[i-1]->y();
+            shiftWidgets[i]->move(shiftWidgets[i]->width()/8,prevH + prevY + prevH/4);
         }
-        height += shiftWidgets[i]->height();
         shiftWidgets[i]->update();
     }
-
-    resize(shiftWidgets[0]->width()+shiftWidgets[0]->width()/4,height);
+    resize(shiftWidgets[0]->width()+shiftWidgets[0]->width()/4,shiftWidgets[shiftNum-1]->height() + shiftWidgets[shiftNum-1]->height()/4 + shiftWidgets[shiftNum-1]->y());
+    labelDate->resize(this->width(),labelDate->height());
 }
 
 unsigned int DisplayDateShifts::getShiftNum(void)
 {
     return shiftNum;
+}
+
+Date* DisplayDateShifts::getDate(void)
+{
+    return date;
 }

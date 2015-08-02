@@ -8,6 +8,7 @@ CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11 -Wno-sign-compare
 
 QT       += core gui
+QT       += printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

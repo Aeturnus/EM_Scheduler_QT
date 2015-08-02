@@ -33,8 +33,8 @@ public:
     unsigned int getShiftNum(void);
 
     void update(void);  //Update appearances
-    int WIDTH = 100;
-    int HEIGHT = 800;
+
+    Date* getDate(void);
 private:
     Ui::DisplayDateShifts *ui;
     Date* date;                     //Pass pointer of the selected date to it

@@ -23,6 +23,10 @@
 #include <QScrollArea>
 #include <QScrollBar>
 
+#include <QImage>
+#include <QPainter>
+#include <QPrinter>
+
 #include <string>
 #include <ostream>
 #include <istream>
@@ -172,7 +176,7 @@ void MainWindow::saveAs(void)
             QMessageBox::critical(this,tr("Error"),tr("Could not write to file"));
             return;
         }
-        ui->statusBar->showMessage("Schedule saved to" + fileName);
+        ui->statusBar->showMessage("Schedule saved to " + fileName);
 
         ofstream fileo;
         fileo.open(fileName.toStdString(), ios_base::out | ios_base::binary);
@@ -199,11 +203,8 @@ void MainWindow::exportAs(void)
     //Make sure a schedule is loaded
     if(scheduleLoaded)
     {
-        workbook wb;
-        scheduleToXLS(*schedule,wb);
-
         QString dirPath = QString::fromStdString((*exportdir)) +"/"+ QString::fromStdString(schedule->getName());
-        QString fileName = QFileDialog::getSaveFileName(this,tr("Export .xls"),dirPath,tr("Excel 97-2003 (*.xls);;All files (*.*)"));
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg, *.jpg);; PDF (*.pdf)"));
         if(!fileName.isEmpty())
         {
             QFile file(fileName);
@@ -212,9 +213,34 @@ void MainWindow::exportAs(void)
                 QMessageBox::critical(this,tr("Error"),tr("Could not write to file"));
                 return;
             }
-            wb.Dump(fileName.toStdString());
-            ui->statusBar->showMessage("Schedule exported to " + fileName,0);
-            exportpath = fileName.toStdString();
+
+            //What file type?
+            if(fileName.endsWith(".xls"))
+            {
+                workbook wb;
+                scheduleToXLS(*schedule,wb);
+                wb.Dump(fileName.toStdString());
+                ui->statusBar->showMessage("Schedule exported to " + fileName,0);
+                exportpath = fileName.toStdString();
+            }
+            else if (fileName.endsWith(".png") || fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".bmp"))
+            {
+                //display->grab().save(fileName);
+                display->grab().toImage().save(fileName,0,-1);
+            }
+            else if (fileName.endsWith(".pdf"))
+            {
+                //PDF handling
+                QImage image = display->grab().toImage();
+
+                QPrinter printer(QPrinter::HighResolution);
+                printer.setOutputFormat(QPrinter::PdfFormat);
+                printer.setOutputFileName(fileName);
+
+                QPainter painter(&printer);
+                painter.drawImage(0,0,image);
+                painter.end();
+            }
         }
     }
 }
