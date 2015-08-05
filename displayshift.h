@@ -25,6 +25,7 @@ public:
     void init(Shift* attachShift, Scheduler* attachSchedule);
 
     void update(void);
+
 private:
     Ui::DisplayShift *ui;
 

@@ -59,16 +59,15 @@ void DisplayShift::update(void)
         {
             ui->label_student->setText("<font color=blue>" + QString::fromStdString(shift->student()->getName()) + "</font>");
         }
-
-        //Is manually set
-        if(shift->isManual())
-        {
-            ui->label_manual->setText("MANUALLY SET");
-        }
-        else
-        {
-            ui->label_manual->setText("");
-        }
+    }
+    //Is manually set
+    if(shift->isManual())
+    {
+        ui->label_manual->setText("<font color=green>MANUALLY SET</font>");
+    }
+    else
+    {
+        ui->label_manual->setText("");
     }
 }
 
@@ -77,6 +76,7 @@ void DisplayShift::mousePressEvent(QMouseEvent* event)
     ShiftSelect* s = new ShiftSelect();
     s->init(shift,schedule);
     s->exec();
-
     delete s;
+
+    update();
 }

@@ -10,6 +10,7 @@
 
 #include "newschedule.h"
 #include "editpreferences.h"
+#include "editschedule.h"
 
 #include <xlslib.h>
 #include <xlslib/common.h>
@@ -299,4 +300,12 @@ void MainWindow::resizeScrollArea(void)
 {
     scrollArea->move(0,ui->menuBar->height()+ui->mainToolBar->height());
     scrollArea->resize(width(),height() - ui->mainToolBar->height() - scrollArea->horizontalScrollBar()->height() - ui->statusBar->height());
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    EditSchedule e;
+    e.init(schedule);
+    e.exec();
+    display->update();
 }

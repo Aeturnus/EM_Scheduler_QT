@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DisplayStudent</class>
- <widget class="QFrame" name="DisplayStudent">
+ <widget class="QPushButton" name="DisplayStudent">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>150</width>
-    <height>60</height>
+    <height>80</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
-  </property>
-  <property name="frameShape">
-   <enum>QFrame::StyledPanel</enum>
-  </property>
-  <property name="frameShadow">
-   <enum>QFrame::Raised</enum>
   </property>
   <widget class="QLabel" name="labelName">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>10</y>
      <width>150</width>
      <height>20</height>
     </rect>
@@ -46,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>20</y>
+     <y>30</y>
      <width>150</width>
      <height>20</height>
     </rect>
@@ -56,6 +49,25 @@
    </property>
    <property name="text">
     <string># of shifts assigned</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelShiftMax">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>50</y>
+     <width>150</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="text">
+    <string>(# max shifts)</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

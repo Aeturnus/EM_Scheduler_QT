@@ -1,6 +1,7 @@
 #ifndef SHIFTSELECT_H
 #define SHIFTSELECT_H
 
+#include <QObject>
 #include <QDialog>
 
 #include "../EM_Scheduler/Shift.h"
@@ -30,6 +31,10 @@ private slots:
     void on_pushButtonBlock_clicked();
 
     void on_pushButtonUnblock_clicked();
+
+    void on_pushButtonUnassign_clicked();
+
+    void on_pushButtonAssign_clicked();
 
 private:
     Ui::ShiftSelect *ui;

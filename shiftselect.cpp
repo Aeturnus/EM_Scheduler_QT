@@ -1,6 +1,9 @@
 #include "shiftselect.h"
 #include "ui_shiftselect.h"
 
+
+#include "studentselect.h"
+
 ShiftSelect::ShiftSelect(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ShiftSelect)
@@ -23,9 +26,11 @@ void ShiftSelect::init(Shift *attachShift, Scheduler *attachSchedule)
 
 void ShiftSelect::update(void)
 {
-    QString nametime = QString::fromStdString(shift->getName()) + " " + QString::fromStdString(shift->shiftTimeString());
+    QString name= QString::fromStdString(shift->getName());
+    ui->labelName->setText(name);
 
-    ui->labelNameTime->setText(nametime);
+    QString time = QString::fromStdString(shift->shiftTimeString());
+    ui->labelTime->setText(time);
 
     QString studentname = (shift->student()!=nullptr)?(QString::fromStdString(shift->student()->getName())):"Open";
     ui->labelStudent->setText(studentname);
@@ -64,5 +69,20 @@ void ShiftSelect::on_pushButtonUnblock_clicked()
 {
     shift->unblock();
     shift->setManual(true);
+    update();
+}
+
+void ShiftSelect::on_pushButtonUnassign_clicked()
+{
+    schedule->unassign(shift,true);
+    update();
+}
+
+void ShiftSelect::on_pushButtonAssign_clicked()
+{
+    StudentSelect* s = new StudentSelect();
+    s->init(shift,schedule);
+    s->exec();
+    delete s;
     update();
 }

@@ -46,8 +46,7 @@
      <string>Schedule</string>
     </property>
     <addaction name="actionAuto_Assign"/>
-    <addaction name="actionManual_Assign"/>
-    <addaction name="actionManual_Block"/>
+    <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -118,19 +117,14 @@
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionManual_Assign">
-   <property name="text">
-    <string>Manual Assign</string>
-   </property>
-  </action>
-  <action name="actionManual_Block">
-   <property name="text">
-    <string>Manual Block</string>
-   </property>
-  </action>
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
