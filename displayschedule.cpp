@@ -57,11 +57,12 @@ void DisplaySchedule::init(Scheduler *attachSchedule)
     for(int i = 0; i < dateNum; i++)
     {
         dateShiftWidgets[i] = new DisplayDateShifts(this);
-        dateShiftWidgets[i]->init(&(schedule->dates()[i]),schedule);
+        dateShiftWidgets[i]->init(&(schedule->dates()[i]),schedule,i);
         if(dateShiftWidgets[i]->height() > maxHeight)
         {
             maxHeight = dateShiftWidgets[i]->height();  //Update maxHeight if a taller one is found
         }
+
     }
 
     //Initialize weekdays

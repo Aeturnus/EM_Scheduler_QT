@@ -38,6 +38,10 @@ private slots:
 
     void on_pushButtonChangeName_clicked();
 
+    void on_pushButtonChangeBlockReason_clicked();
+
+    void on_pushButtonChangeTime_clicked();
+
 private:
     Ui::ShiftSelect *ui;
 

@@ -51,6 +51,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::init(Scheduler *attachSchedule, string *attachSaveDir, string *attachExportDir)
 {
+    this->setWindowState(Qt::WindowMaximized);
     scheduleLoaded = false;
     display = new DisplaySchedule(this);
     //display->setBackgroundRole(QPalette::Dark);

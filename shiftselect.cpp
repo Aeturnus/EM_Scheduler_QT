@@ -8,6 +8,8 @@
 #include "../EM_Scheduler/Shift.h"
 
 #include "studentselect.h"
+#include "stringedit.h"
+#include "shifttimeedit.h"
 
 ShiftSelect::ShiftSelect(QWidget *parent) :
     QDialog(parent),
@@ -48,6 +50,13 @@ void ShiftSelect::update(void)
 
     //TODO: DATE
     this->setWindowTitle(QString::fromStdString(shift->date()->toString()));
+
+    //Disable changing block reason if it's not blocked
+    ui->pushButtonChangeBlockReason->setEnabled(shift->isBlocked());
+
+    ui->pushButtonAssign->setEnabled(!(shift->isBlocked()));
+    ui->pushButtonUnassign->setEnabled(!(shift->isBlocked()));
+    ui->pushButtonBlock->setEnabled(!(shift->isBlocked()));
 }
 
 void ShiftSelect::on_pushButtonSetManual_clicked()
@@ -66,6 +75,13 @@ void ShiftSelect::on_pushButtonBlock_clicked()
 {
    shift->block(shift->getBlockReason());
    shift->setManual(true);
+
+   StringEdit e;
+   std::string blockReason= shift->getBlockReason();
+   e.init(&blockReason,"Set Block Reason");
+   e.exec();
+   shift->block(blockReason);
+
    update();
 }
 
@@ -94,11 +110,28 @@ void ShiftSelect::on_pushButtonAssign_clicked()
 
 void ShiftSelect::on_pushButtonChangeName_clicked()
 {
-    std::vector<Student*> exclude;
-    exclude.clear();
-    if(!(schedule->resolve(shift,&exclude)))
-    {
-        QMessageBox::critical(this,tr("Error"),tr("Resolve failed"));
-    }
+    StringEdit e;
+    std::string name = shift->getName();
+    e.init(&name,"Change Shift Name");
+    e.exec();
+    shift->setName(name);
+    update();
+}
+
+void ShiftSelect::on_pushButtonChangeBlockReason_clicked()
+{
+    StringEdit e;
+    std::string blockReason= shift->getBlockReason();
+    e.init(&blockReason,"Change Block Reason");
+    e.exec();
+    shift->setBlockReason(blockReason);
+    update();
+}
+
+void ShiftSelect::on_pushButtonChangeTime_clicked()
+{
+    ShiftTimeEdit e;
+    e.init(schedule,shift);
+    e.exec();
     update();
 }

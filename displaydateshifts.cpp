@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QString>
 #include <QFont>
+#include <QPalette>
 
 #include <string>
 #include <sstream>
@@ -29,7 +30,7 @@ DisplayDateShifts::~DisplayDateShifts()
     delete[] shiftWidgets;          //Free the array of pointers
 }
 
-void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
+void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule, int number)
 {
     date = attachDate;
     schedule = attachSchedule;
@@ -58,6 +59,19 @@ void DisplayDateShifts::init(Date *attachDate, Scheduler *attachSchedule)
         shiftWidgets[i]->show();
     }
     //Size and placement of shifts
+
+    QPalette pal(this->palette());
+    if(number % 2 == 1)
+    {
+        pal.setColor(QPalette::Background,Qt::lightGray);
+    }
+    else
+    {
+        //pal.setColor(QPalette::Background,Qt::white);
+    }
+    this->setAutoFillBackground(true);
+    this->setPalette(pal);
+
     update();
 
 }

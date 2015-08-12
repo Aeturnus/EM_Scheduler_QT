@@ -28,7 +28,7 @@ class DisplayDateShifts : public QFrame
 public:
     explicit DisplayDateShifts(QWidget *parent = 0);
     ~DisplayDateShifts();
-    void init(Date* attachDate, Scheduler* attachSchedule);
+    void init(Date* attachDate, Scheduler* attachSchedule, int number = 0); //Number is for if you want colors to alternate
 
     unsigned int getShiftNum(void);
 
