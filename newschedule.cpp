@@ -51,6 +51,8 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
     adjustStudentNameVector();
     adjustShiftVector();
 
+    //Original
+    /*
     //Initial values of shifts
     shiftNameVector[0] = "Shift";
     shiftTimeVector[0] = {7,16};
@@ -62,6 +64,19 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
     shiftTimeVector[3] = {7,16};
     shiftNameVector[4] = "Crash";
     shiftTimeVector[4] = {15,24};
+    */
+    //Initial values of shifts
+    shiftNameVector[0] = "Shift";
+    shiftTimeVector[0] = {7,16};
+    shiftNameVector[1] = "Crash";
+    shiftTimeVector[1] = {7,16};
+    shiftNameVector[2] = "Shift";
+    shiftTimeVector[2] = {15,24};
+    shiftNameVector[3] = "Crash";
+    shiftTimeVector[3] = {15,24};
+    shiftNameVector[4] = "Shift";
+    shiftTimeVector[4] = {23,32};
+
 
     //Set day to be today
     ui->dateEdit_Start->setDate(QDate::currentDate());
@@ -92,11 +107,13 @@ void NewSchedule::on_buttonBox_accepted()
         shifttimes[i][1] = shiftTimeVector[i][1];
     }
 
+
+    schedule->init(name,start,end,numshift,&shiftNameVector[0],shifttimes,numstudents,&studentNameVector[0]);
+
+    //Put this after...It'll clober everything otherwise
     schedule->setMaxShifts(ui->spinBox_NumMaxShifts->value());
     schedule->setMinShifts(ui->spinBox_NumMinShifts->value());
     schedule->setMaxConsecutive(ui->spinBox_NumMaxCon->value());
-
-    schedule->init(name,start,end,numshift,&shiftNameVector[0],shifttimes,numstudents,&studentNameVector[0]);
 
 
     //Create dirs

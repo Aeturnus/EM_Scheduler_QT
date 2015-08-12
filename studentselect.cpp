@@ -5,6 +5,7 @@
 #include <QMessageBox>
 
 #include "displayshift.h"
+#include "overrideselect.h"
 
 StudentSelect::StudentSelect(QWidget *parent) :
     QDialog(parent),
@@ -72,23 +73,29 @@ void StudentSelect::selected(QObject *objectClicked)
     DisplayStudent* clickedObject = (DisplayStudent*)objectClicked;
     Scheduler::AssignReturn state;
     state = schedule->assign(shift,clickedObject->getStudent(),true);
+    bool success = false;
     //Throw an error message if it can't be assigned
+    OverrideSelect o;
+    o.init(schedule,shift,clickedObject->getStudent(),state,&success);
     switch(state)
     {
         case Scheduler::SUCCESS:
-            this->close();
+            success = true;
             break;
         case Scheduler::CONSEC:
-            QMessageBox::critical(this,tr("Error"),tr("Student will have too many consecutive shifts"));
+            //QMessageBox::critical(this,tr("Error"),tr("Student will have too many consecutive shifts"));
+            o.exec();
             break;
         case Scheduler::OVERLAP:
             QMessageBox::critical(this,tr("Error"),tr("Student has a time conflict"));
             break;
         case Scheduler::OVERMAX:
-            QMessageBox::critical(this,tr("Error"),tr("Student has the maximum number of shifts"));
+            //QMessageBox::critical(this,tr("Error"),tr("Student has the maximum number of shifts"));
+            o.exec();
             break;
         case Scheduler::MINTIME:
-            QMessageBox::critical(this,tr("Error"),tr("Student has had a shift in the last 8 hours"));
+            //QMessageBox::critical(this,tr("Error"),tr("Student has had a shift in the last 8 hours"));
+            o.exec();
             break;
         case Scheduler::ISNULL:
             QMessageBox::critical(this,tr("Error"),tr("Student is non-existent (How did you even do this?)"));
@@ -96,6 +103,8 @@ void StudentSelect::selected(QObject *objectClicked)
 
 
     }
+    if(success)
+        this->close();
     /*
     if(state == Scheduler::SUCCESS)
     {

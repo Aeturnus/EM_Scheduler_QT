@@ -24,6 +24,8 @@
 #include <QScrollArea>
 #include <QScrollBar>
 
+#include <QDesktopServices>
+
 #include <QImage>
 #include <QPainter>
 #include <QPrinter>
@@ -124,6 +126,13 @@ void MainWindow::open(void)
             QMessageBox::critical(this,tr("Error"),tr("Could not open file"));
             return;
         }
+
+        //Delete up here; display requires old schedule pointer to work
+        if(scheduleLoaded)
+        {
+            delete display;
+        }
+
         ui->statusBar->showMessage("Schedule loaded from " + fileName);
         scheduleLoaded = true;
         ifstream filei;
@@ -133,14 +142,14 @@ void MainWindow::open(void)
         updateMenu();
         savepath = fileName.toStdString();
 
-        if(scheduleLoaded)
-        {
-            display->deleteMem();
-        }
+
+
+        display = new DisplaySchedule(this);
         display->init(schedule);
-
-
+        scrollArea->setWidget(display);
+        display->show();
     }
+    updateMenu();
 }
 
 void MainWindow::save(void)
@@ -197,6 +206,7 @@ void MainWindow::exportNormal(void)
         wb.Dump(exportpath);
         ui->statusBar->showMessage("Schedule exported to " + QString::fromStdString(exportpath),0);
     }
+    QDesktopServices::openUrl(QString::fromStdString(*exportdir));
 }
 
 void MainWindow::exportAs(void)
@@ -242,28 +252,38 @@ void MainWindow::exportAs(void)
                 painter.drawImage(0,0,image);
                 painter.end();
             }
+            QDesktopServices::openUrl(file.fileName().remove(file.fileName().lastIndexOf('/'),file.fileName().length()-file.fileName().lastIndexOf('/')));
         }
     }
 }
 
 void MainWindow::newSchedule(void)
 {
-
+    bool result = false;    //Temporarily give a result variable
 
     NewSchedule n;
-    n.init(schedule,savedir,exportdir,&scheduleLoaded);
+    n.init(schedule,savedir,exportdir,&result);
     n.exec();//Force user to accept something
-    if(scheduleLoaded)
+    if(result)
     {
         savepath = *savedir + "/" + schedule->getName() + ".schd";
         exportpath = *exportdir + "/" + schedule->getName() + ".xls";
         updateMenu();
 
-
-        display->deleteMem();
+        //If there is already a schedule loaded, delete this
+        if(scheduleLoaded)
+        {
+            delete display;
+        }
+        display = new DisplaySchedule(this);
         display->init(schedule);
+        scrollArea->setWidget(display);
+        display->show();
     }
 
+    scheduleLoaded = result;
+
+    updateMenu();
 }
 
 void MainWindow::on_actionSave_As_triggered()
@@ -278,7 +298,6 @@ void MainWindow::on_actionExport_as_triggered()
 
 void MainWindow::on_actionAuto_Assign_triggered()
 {
-    schedule->autoblock();
     schedule->autoassign();
     display->update();
 }
@@ -307,5 +326,11 @@ void MainWindow::on_actionSettings_triggered()
     EditSchedule e;
     e.init(schedule);
     e.exec();
+    display->update();
+}
+
+void MainWindow::on_actionAuto_Block_triggered()
+{
+    schedule->autoblock();
     display->update();
 }

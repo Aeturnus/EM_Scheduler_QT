@@ -43,6 +43,8 @@ private slots:
 
     void on_actionSettings_triggered();
 
+    void on_actionAuto_Block_triggered();
+
 private:
     Ui::MainWindow *ui;
 

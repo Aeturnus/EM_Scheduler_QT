@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     shiftselect.cpp \
     displaystudent.cpp \
     studentselect.cpp \
-    editschedule.cpp
+    editschedule.cpp \
+    overrideselect.cpp
 
 HEADERS  += mainwindow.h \
     ../EM_Scheduler/Date.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     shiftselect.h \
     displaystudent.h \
     studentselect.h \
-    editschedule.h
+    editschedule.h \
+    overrideselect.h
 
 FORMS    += mainwindow.ui \
     newrotators.ui \
@@ -71,7 +73,8 @@ FORMS    += mainwindow.ui \
     shiftselect.ui \
     displaystudent.ui \
     studentselect.ui \
-    editschedule.ui
+    editschedule.ui \
+    overrideselect.ui
 
 LIBS  += "C:/lib/xlslib-qt/lib/libxls.a"
 INCLUDEPATH += "C:/lib/xlslib-qt/include"

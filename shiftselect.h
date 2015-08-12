@@ -36,6 +36,8 @@ private slots:
 
     void on_pushButtonAssign_clicked();
 
+    void on_pushButtonChangeName_clicked();
+
 private:
     Ui::ShiftSelect *ui;
 

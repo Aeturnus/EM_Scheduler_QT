@@ -45,6 +45,7 @@
     <property name="title">
      <string>Schedule</string>
     </property>
+    <addaction name="actionAuto_Block"/>
     <addaction name="actionAuto_Assign"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -114,7 +115,7 @@
     <string>Auto Assign</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -125,6 +126,14 @@
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionAuto_Block">
+   <property name="text">
+    <string>Auto Block</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

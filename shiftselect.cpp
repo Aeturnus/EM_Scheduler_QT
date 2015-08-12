@@ -1,6 +1,11 @@
 #include "shiftselect.h"
 #include "ui_shiftselect.h"
 
+#include <QMessageBox>
+
+#include <vector>
+#include "../EM_Scheduler/Scheduler.h"
+#include "../EM_Scheduler/Shift.h"
 
 #include "studentselect.h"
 
@@ -84,5 +89,16 @@ void ShiftSelect::on_pushButtonAssign_clicked()
     s->init(shift,schedule);
     s->exec();
     delete s;
+    update();
+}
+
+void ShiftSelect::on_pushButtonChangeName_clicked()
+{
+    std::vector<Student*> exclude;
+    exclude.clear();
+    if(!(schedule->resolve(shift,&exclude)))
+    {
+        QMessageBox::critical(this,tr("Error"),tr("Resolve failed"));
+    }
     update();
 }
