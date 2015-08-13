@@ -11,6 +11,7 @@
 #include "newschedule.h"
 #include "editpreferences.h"
 #include "editschedule.h"
+#include "showunassigned.h"
 
 #include <xlslib.h>
 #include <xlslib/common.h>
@@ -103,6 +104,23 @@ void MainWindow::updateMenu()
     ui->actionSave_As->setEnabled(scheduleLoaded);
     ui->menuSchedule->setEnabled(scheduleLoaded);
 
+    if(!scheduleLoaded)
+    {
+        display->hide();
+        scrollArea->hide();
+        ui->pushButtonNew->move(this->width()/2 - ui->pushButtonNew->width()/2, ui->centralWidget->height()/2 - ui->pushButtonNew->height());
+        ui->pushButtonOpen->move(this->width()/2 - ui->pushButtonOpen->width()/2, ui->centralWidget->height()/2 + 20);
+        ui->pushButtonNew->show();
+        ui->pushButtonOpen->show();
+    }
+    else
+    {
+        display->show();
+        scrollArea->show();
+        ui->pushButtonNew->hide();
+        ui->pushButtonOpen->hide();
+    }
+
 }
 
 void MainWindow::on_actionOpen_Schedule_triggered()
@@ -142,6 +160,7 @@ void MainWindow::open(void)
         filei.close();
         updateMenu();
         savepath = fileName.toStdString();
+        exportpath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*exportdir) + "/" + schedule->getName() + ".xls" );
 
 
 
@@ -203,7 +222,7 @@ void MainWindow::exportNormal(void)
     {
         workbook wb;
         scheduleToXLS(*schedule,wb);
-        std::string exportpath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*exportdir) + "/" + schedule->getName() + ".xls" );
+        //exportpath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*exportdir) + "/" + schedule->getName() + ".xls" );
         wb.Dump(exportpath);
         ui->statusBar->showMessage("Schedule exported to " + QString::fromStdString(exportpath),0);
     }
@@ -216,7 +235,7 @@ void MainWindow::exportAs(void)
     if(scheduleLoaded)
     {
         QString dirPath = QString::fromStdString((*exportdir)) +"/"+ QString::fromStdString(schedule->getName());
-        QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg, *.jpg);; PDF (*.pdf)"));
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg);; PDF (*.pdf)"));
         if(!fileName.isEmpty())
         {
             QFile file(fileName);
@@ -299,8 +318,15 @@ void MainWindow::on_actionExport_as_triggered()
 
 void MainWindow::on_actionAuto_Assign_triggered()
 {
+    //QDialog d;
+    //d.setWindowTitle("Autoassigning...");
+    //d.resize(d.width(),0);
+    //d.show();
+    ui->statusBar->showMessage("Autoassigning...");
     schedule->autoassign();
     display->update();
+    ui->statusBar->showMessage("Autoassign complete");
+    //d.close();
 }
 
 void MainWindow::on_actionPreferences_triggered()
@@ -320,6 +346,10 @@ void MainWindow::resizeScrollArea(void)
 {
     scrollArea->move(0,ui->menuBar->height()+ui->mainToolBar->height());
     scrollArea->resize(width(),height() - ui->mainToolBar->height() - scrollArea->horizontalScrollBar()->height() - ui->statusBar->height());
+
+    ui->pushButtonNew->move(this->width()/2 - ui->pushButtonNew->width()/2, ui->centralWidget->height()/2 - ui->pushButtonNew->height());
+    ui->pushButtonOpen->move(this->width()/2 - ui->pushButtonOpen->width()/2, ui->centralWidget->height()/2 + 20);
+
 }
 
 void MainWindow::on_actionSettings_triggered()
@@ -333,5 +363,31 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_actionAuto_Block_triggered()
 {
     schedule->autoblock();
+    display->update();
+}
+
+
+void MainWindow::on_pushButtonNew_clicked()
+{
+    newSchedule();
+}
+
+void MainWindow::on_pushButtonOpen_clicked()
+{
+    open();
+}
+
+void MainWindow::on_actionAuto_triggered()
+{
+    //on_actionAuto_Block_triggered();
+    schedule->autoblock();
+    on_actionAuto_Assign_triggered();
+}
+
+void MainWindow::on_actionView_open_shifts_triggered()
+{
+    ShowUnassigned s;
+    s.init(schedule);
+    s.exec();
     display->update();
 }

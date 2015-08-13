@@ -20,6 +20,11 @@ NewSchedule::NewSchedule(QWidget *parent) :
     ui(new Ui::NewSchedule)
 {
     ui->setupUi(this);
+    //Unimplemented buttons
+    ui->spinBox_NumShifts->hide();
+    ui->toolButton_ShiftEdit->hide();
+    ui->label_8->hide();
+    ui->label_9->hide();
 }
 
 NewSchedule::~NewSchedule()
@@ -80,9 +85,10 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
 
     //Set day to be today
     ui->dateEdit_Start->setDate(QDate::currentDate());
-    ui->dateEdit_Start->setMinimumDate(QDate::currentDate());
+    //ui->dateEdit_Start->setMinimumDate(QDate::currentDate());
     ui->dateEdit_End->setDate(QDate::currentDate());
-    ui->dateEdit_End->setMinimumDate(QDate::currentDate());
+    //ui->dateEdit_End->setMinimumDate(QDate::currentDate());
+    ui->dateEdit_End->setMinimumDate(ui->dateEdit_Start->date());
 
     updateButtonBox();
     updateAdv();
@@ -139,6 +145,7 @@ void NewSchedule::on_buttonBox_accepted()
 
 void NewSchedule::updateAdv(void)
 {
+    ui->spinBox_NumMaxCon->setEnabled(advmode);
     ui->spinBox_NumShifts->setEnabled(advmode);
     ui->toolButton_ShiftEdit->setEnabled(advmode);
     ui->lineEdit_DirectorySave->setEnabled(advmode);

@@ -45,6 +45,14 @@ private slots:
 
     void on_actionAuto_Block_triggered();
 
+    void on_pushButtonNew_clicked();
+
+    void on_pushButtonOpen_clicked();
+
+    void on_actionAuto_triggered();
+
+    void on_actionView_open_shifts_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -71,6 +79,7 @@ private:
     void saveAs(void);
     void exportNormal(void);
     void exportAs(void);
+
 
 
 };

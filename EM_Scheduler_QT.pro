@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     editschedule.cpp \
     overrideselect.cpp \
     stringedit.cpp \
-    shifttimeedit.cpp
+    shifttimeedit.cpp \
+    showunassigned.cpp
 
 HEADERS  += mainwindow.h \
     ../EM_Scheduler/Date.h \
@@ -63,7 +64,8 @@ HEADERS  += mainwindow.h \
     editschedule.h \
     overrideselect.h \
     stringedit.h \
-    shifttimeedit.h
+    shifttimeedit.h \
+    showunassigned.h
 
 FORMS    += mainwindow.ui \
     newrotators.ui \
@@ -80,7 +82,8 @@ FORMS    += mainwindow.ui \
     editschedule.ui \
     overrideselect.ui \
     stringedit.ui \
-    shifttimeedit.ui
+    shifttimeedit.ui \
+    showunassigned.ui
 
 LIBS  += "C:/lib/xlslib-qt/lib/libxls.a"
 INCLUDEPATH += "C:/lib/xlslib-qt/include"
