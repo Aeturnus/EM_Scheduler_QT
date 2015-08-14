@@ -17,6 +17,7 @@ public:
     ~SetDate();
 
     void init(QDate* attachDate,QDate minDate);
+    void init(QDate* attachDate);
 
 private slots:
 

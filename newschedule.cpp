@@ -7,6 +7,7 @@
 #include <QDialogButtonBox>
 
 #include <string>
+#include <sstream>
 #include "../EM_Scheduler/Scheduler.h"
 #include "../EM_Scheduler/Student.h"
 #include "../EM_Scheduler/Date.h"
@@ -90,8 +91,12 @@ void NewSchedule::init(Scheduler* attachSchedule, std::string* attachSaveDir, st
     //ui->dateEdit_End->setMinimumDate(QDate::currentDate());
     ui->dateEdit_End->setMinimumDate(ui->dateEdit_Start->date());
 
+    ui->labelNameWarning->show();
+    updateMaxWarning();
+
     updateButtonBox();
     updateAdv();
+
 }
 void NewSchedule::on_buttonBox_accepted()
 {
@@ -214,10 +219,11 @@ void NewSchedule::on_toolButton_StartDate_clicked()
     //Start up a setdate dialog
     SetDate d;
     QDate date;
-    d.init(&date,QDate::currentDate());
+    d.init(&date);
     d.exec();
     ui->dateEdit_Start->setDate(date);
     ui->dateEdit_End->setMinimumDate(date); //Set End's min date
+    updateMaxWarning();
 }
 
 void NewSchedule::on_toolButton_EndDate_clicked()
@@ -228,17 +234,53 @@ void NewSchedule::on_toolButton_EndDate_clicked()
     d.init(&date,ui->dateEdit_Start->date());   //Minimum date is the start
     d.exec();
     ui->dateEdit_End->setDate(date);
+    updateMaxWarning();
 }
 
 void NewSchedule::on_dateEdit_Start_dateChanged(const QDate &date)
 {
     ui->dateEdit_End->setMinimumDate(ui->dateEdit_Start->date());   //Set End's min date
+    updateMaxWarning();
 }
 
 void NewSchedule::on_toolButton_StudentNames_clicked()
 {
+    ui->labelNameWarning->hide();
     NewRotators n;
     adjustStudentNameVector();
     n.init(&studentNameVector);
     n.exec();
+    for(int i = studentNameVector.size()-1; i>=0; i--)
+    {
+        if(studentNameVector[i].size() == 0)
+            ui->labelNameWarning->show();
+    }
+}
+
+void NewSchedule::on_spinBox_NumMaxShifts_valueChanged(int arg1)
+{
+    updateMaxWarning();
+}
+
+void NewSchedule::updateMaxWarning(void)
+{
+    int diff = ui->dateEdit_Start->date().daysTo(ui->dateEdit_End->date());
+    int shiftcount = diff * 5 / ui->spinBox_NumStudents->value();
+    if(ui->spinBox_NumMaxShifts->value() < shiftcount)
+    {
+        std::stringstream sstream;
+        sstream<<std::dec<<"You need "<<shiftcount<<" to guarantee all shifts are filled"<<std::endl;
+        ui->labelMaxShiftWarning->setText(QString::fromStdString(sstream.str()));
+        ui->labelMaxShiftWarning->show();
+        ui->labelMaxShiftWarning->adjustSize();
+    }
+    else
+    {
+        ui->labelMaxShiftWarning->hide();
+    }
+}
+
+void NewSchedule::on_dateEdit_End_dateChanged(const QDate &date)
+{
+    updateMaxWarning();
 }

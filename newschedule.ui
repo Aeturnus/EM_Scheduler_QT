@@ -380,6 +380,32 @@
     </rect>
    </property>
   </widget>
+  <widget class="QLabel" name="labelNameWarning">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>130</y>
+     <width>190</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Student names not set</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelMaxShiftWarning">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>160</y>
+     <width>190</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Max shift warning</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

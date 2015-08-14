@@ -39,6 +39,10 @@ private slots:
 
     void on_toolButton_StudentNames_clicked();
 
+    void on_spinBox_NumMaxShifts_valueChanged(int arg1);
+
+    void on_dateEdit_End_dateChanged(const QDate &date);
+
 private:
     Ui::NewSchedule *ui;
 
@@ -61,6 +65,8 @@ private:
 
     void adjustStudentNameVector(void);
     void adjustShiftVector(void);
+
+    void updateMaxWarning(void);
 
 };
 

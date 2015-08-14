@@ -19,6 +19,12 @@ void SetDate::init(QDate *attachDate, QDate minDate)
     ui->calendarWidget->setMinimumDate(minDate);
 }
 
+void SetDate::init(QDate *attachDate)
+{
+    date = attachDate;
+}
+
+
 void SetDate::on_buttonBox_accepted()
 {
     *date = ui->calendarWidget->selectedDate();

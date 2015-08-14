@@ -32,7 +32,7 @@ void OverrideSelect::init(Scheduler *attachSchedule, Shift *attachShift, Student
         typeString = "Student will have too many consecutive shifts!";
         break;
     case Scheduler::MINTIME:
-        typeString = "Student has had a shift in the last 8 hours!";
+        typeString = "Student has a shift within 8 hours of this shift!";
         break;
     case Scheduler::OVERLAP:
         this->close();

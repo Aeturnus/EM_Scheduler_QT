@@ -158,7 +158,6 @@ void MainWindow::open(void)
         filei.open(fileName.toStdString(), ios_base::in | ios_base::binary);//Binary mode so it doesn't reach premature EOF
         schedule->streamInBinary(filei);
         filei.close();
-        updateMenu();
         savepath = fileName.toStdString();
         exportpath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*exportdir) + "/" + schedule->getName() + ".xls" );
 
@@ -235,7 +234,7 @@ void MainWindow::exportAs(void)
     if(scheduleLoaded)
     {
         QString dirPath = QString::fromStdString((*exportdir)) +"/"+ QString::fromStdString(schedule->getName());
-        QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg);; PDF (*.pdf)"));
+        QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg);; PDF (experimental!) (*.pdf)"));
         if(!fileName.isEmpty())
         {
             QFile file(fileName);
@@ -390,4 +389,61 @@ void MainWindow::on_actionView_open_shifts_triggered()
     s.init(schedule);
     s.exec();
     display->update();
+}
+
+void MainWindow::on_actionManual_triggered()
+{
+
+    QDesktopServices::openUrl(QDir::currentPath() + QString::fromStdString("/manual/UserManual.pdf"));
+}
+
+
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QDialog x;
+    x.setWindowTitle("About");
+    QLabel l1(&x);
+    //l1.resize(300,20);
+    QLabel l2(&x);
+    //l2.resize(300,20);
+    QLabel l3(&x);
+    //l3.resize(300,20);
+    QLabel l4(&x);
+    //l4.resize(300,20);
+    QLabel l5(&x);
+    //l5.resize(300,20);
+
+    l1.setText("EM Scheduler (Qt) Version 1.01");
+    l1.adjustSize();
+    l1.move(10,10);
+
+    l2.setText("by Brandon Nguyen");
+    l2.adjustSize();
+    l2.move(10,l1.y() + l1.height() + 10);
+
+    l3.setText("<a href=\"http://brandontnguyen.com\">brandontnguyen.com</a>");
+    l3.setTextFormat(Qt::RichText);
+    l3.setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    l3.setOpenExternalLinks(true);
+    l3.adjustSize();
+    l3.move(10,l2.y() + l2.height() + 0);
+
+    l4.setText("<a href=\"mailto:brandon.t.nguyen@utexas.edu\">brandon.t.nguyen@utexas.edu</a>");
+    l4.setTextFormat(Qt::RichText);
+    l4.setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    l4.setOpenExternalLinks(true);
+    l4.adjustSize();
+    l4.move(10,l3.y() + l3.height() + 0);
+
+    l5.setText("Source repository: <a href=\"http://github.com/Aeturnus/EM_Scheduler_QT\">github.com/Aeturnus/EM_Scheduler_QT</a>");
+    l5.setTextFormat(Qt::RichText);
+    l5.setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    l5.setOpenExternalLinks(true);
+    l5.move(10,l4.y() + l4.height() + 10);
+    l5.adjustSize();
+
+
+    x.resize(10 + l5.width() + 10, l5.height() + l5.y() + 10);
+    x.exec();
 }

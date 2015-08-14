@@ -53,6 +53,10 @@ private slots:
 
     void on_actionView_open_shifts_triggered();
 
+    void on_actionManual_triggered();
+
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
 
