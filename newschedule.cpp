@@ -269,7 +269,7 @@ void NewSchedule::updateMaxWarning(void)
     if(ui->spinBox_NumMaxShifts->value() < shiftcount)
     {
         std::stringstream sstream;
-        sstream<<std::dec<<"You need "<<shiftcount<<" to guarantee all shifts are filled"<<std::endl;
+        sstream<<std::dec<<"You need a maximum of "<<shiftcount<<" shifts to guarantee all shifts are filled"<<std::endl;
         ui->labelMaxShiftWarning->setText(QString::fromStdString(sstream.str()));
         ui->labelMaxShiftWarning->show();
         ui->labelMaxShiftWarning->adjustSize();

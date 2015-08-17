@@ -54,9 +54,19 @@ void ShiftSelect::update(void)
     //Disable changing block reason if it's not blocked
     ui->pushButtonChangeBlockReason->setEnabled(shift->isBlocked());
 
-    ui->pushButtonAssign->setEnabled(!(shift->isBlocked()));
-    ui->pushButtonUnassign->setEnabled(!(shift->isBlocked()));
+    if(shift->isBlocked())
+    {
+        ui->pushButtonAssign->setEnabled(false);
+        ui->pushButtonUnassign->setEnabled(false);
+    }
+    else
+    {
+        ui->pushButtonAssign->setEnabled(shift->student() == nullptr);
+        ui->pushButtonUnassign->setEnabled(shift->student() != nullptr);
+    }
+
     ui->pushButtonBlock->setEnabled(!(shift->isBlocked()));
+    ui->pushButtonUnblock->setEnabled((shift->isBlocked()));
 }
 
 void ShiftSelect::on_pushButtonSetManual_clicked()

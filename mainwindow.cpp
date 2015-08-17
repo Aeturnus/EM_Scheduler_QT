@@ -32,6 +32,7 @@
 #include <QPrinter>
 
 #include <string>
+#include <sstream>
 #include <ostream>
 #include <istream>
 
@@ -219,6 +220,7 @@ void MainWindow::exportNormal(void)
     //Make sure a schedule is loaded
     if(scheduleLoaded)
     {
+        checkMinimum();
         workbook wb;
         scheduleToXLS(*schedule,wb);
         //exportpath = (Parser::stringReplaceAll((std::string)"\\",(std::string)"/",*exportdir) + "/" + schedule->getName() + ".xls" );
@@ -233,6 +235,7 @@ void MainWindow::exportAs(void)
     //Make sure a schedule is loaded
     if(scheduleLoaded)
     {
+        checkMinimum();
         QString dirPath = QString::fromStdString((*exportdir)) +"/"+ QString::fromStdString(schedule->getName());
         QString fileName = QFileDialog::getSaveFileName(this,tr("Export as..."),dirPath,tr("Excel 97-2003 (*.xls);;PNG (Portable Netowrk Graphics) (*.png);;Windows bitmap (*.bmp);; JPEG (*.jpeg);; PDF (experimental!) (*.pdf)"));
         if(!fileName.isEmpty())
@@ -446,4 +449,33 @@ void MainWindow::on_actionAbout_triggered()
 
     x.resize(10 + l5.width() + 10, l5.height() + l5.y() + 10);
     x.exec();
+}
+
+void MainWindow::checkMinimum()
+{
+    std::stringstream sstream;
+    for(int i = schedule->getStudentNum()-1; i >= 0; i--)
+    {
+        if(schedule->students()[i].getShiftCount() < schedule->getMinShifts())
+        {
+            sstream.clear();
+            sstream.str(std::string());
+            sstream<<schedule->students()[i].getName()<<" has only "<<std::dec<<schedule->students()[i].getShiftCount()<<" of the required "<<schedule->getMinShifts()<<" shifts."<<std::endl;
+            QMessageBox::critical(this,tr("Warning"),QString::fromStdString(sstream.str()));
+        }
+    }
+    int count = 0;
+    for(int i = schedule->getShiftNum()-1; i>=0; i--)
+    {
+        if(schedule->shifts()[i].student() == nullptr)
+            if(!schedule->shifts()[i].isBlocked() )
+                count++;
+    }
+    if(count > 0)
+    {
+        sstream.clear();
+        sstream.str(std::string());
+        sstream<<std::dec<<count<<" shifts are still open"<<std::endl;
+        QMessageBox::critical(this,tr("Warning"),QString::fromStdString(sstream.str()));
+    }
 }

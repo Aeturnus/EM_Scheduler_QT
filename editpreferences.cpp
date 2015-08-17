@@ -17,7 +17,7 @@ EditPreferences::~EditPreferences()
     delete ui;
 }
 
-EditPreferences::init(std::string *saved, std::string *savep, std::string *exportd, std::string *exportp)
+void EditPreferences::init(std::string *saved, std::string *savep, std::string *exportd, std::string *exportp)
 {
     savedir = saved;
     savepath = savep;

@@ -87,3 +87,5 @@ FORMS    += mainwindow.ui \
 
 LIBS  += "C:/lib/xlslib-qt/lib/libxls.a"
 INCLUDEPATH += "C:/lib/xlslib-qt/include"
+#LIBS += "/lib/xlslib/lib/libxls.a"
+#INCLUDEPATH += "/lib/xlslib/include"

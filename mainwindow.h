@@ -84,6 +84,7 @@ private:
     void exportNormal(void);
     void exportAs(void);
 
+    void checkMinimum(void);
 
 
 };

@@ -17,7 +17,7 @@ public:
     explicit EditPreferences(QWidget *parent = 0);
     ~EditPreferences();
 
-    init(std::string* saved, std::string* savep, std::string* exportd, std::string* exportp);
+    void init(std::string* saved, std::string* savep, std::string* exportd, std::string* exportp);
 
 private slots:
     void on_buttonBox_accepted();
